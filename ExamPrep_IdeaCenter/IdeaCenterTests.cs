@@ -9,7 +9,7 @@ namespace ExamPrep_IdeaCenter;
 
 public class Tests
 {
-    private RestClient _client;
+    private RestClient client;
     private static string lastCreatedIdeaId;
     
     private const string BaseUrl = "http://144.91.123.158:82";
@@ -30,7 +30,7 @@ public class Tests
             Authenticator = new JwtAuthenticator(jwtToken)
         };
         
-        _client = new RestClient(options);
+        client = new RestClient(options);
     }
 
     private static string GetJwtToken(string email, string password)
@@ -75,7 +75,7 @@ public class Tests
         request.AddJsonBody(ideaData);
 
         //Act
-        RestResponse response = _client.Execute(request);
+        RestResponse response = client.Execute(request);
         ApiResponseDto responseDto = JsonSerializer.Deserialize<ApiResponseDto>(response.Content);
 
         //Assert
@@ -91,7 +91,7 @@ public class Tests
         RestRequest request = new RestRequest("/api/Idea/All", Method.Get);
         
         //Act
-        RestResponse response = _client.Execute(request);
+        RestResponse response = client.Execute(request);
         List<ApiResponseDto> responseDto = JsonSerializer.Deserialize<List<ApiResponseDto>>(response.Content);
         
         //Assert
@@ -118,7 +118,7 @@ public class Tests
         request.AddJsonBody(editData);
 
         //Act
-        RestResponse response = _client.Execute(request);
+        RestResponse response = client.Execute(request);
         ApiResponseDto responseDto = JsonSerializer.Deserialize<ApiResponseDto>(response.Content);
 
         //Assert
@@ -135,7 +135,7 @@ public class Tests
         request.AddQueryParameter("ideaId", lastCreatedIdeaId);
 
         //Act
-        RestResponse response = _client.Execute(request);
+        RestResponse response = client.Execute(request);
 
         //Assert
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Expected status code 200 OK");
@@ -158,7 +158,7 @@ public class Tests
         request.AddJsonBody(ideaData);
 
         //Act
-        RestResponse response = _client.Execute(request);
+        RestResponse response = client.Execute(request);
 
         //Assert
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest), "Expected status code 400");
@@ -181,7 +181,7 @@ public class Tests
         request.AddJsonBody(editData);
 
         //Act
-        RestResponse response = _client.Execute(request);
+        RestResponse response = client.Execute(request);
 
         //Assert
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest), "Expected status code 400");
@@ -197,7 +197,7 @@ public class Tests
         request.AddQueryParameter("ideaId", "123456");
 
         //Act
-        RestResponse response = _client.Execute(request);
+        RestResponse response = client.Execute(request);
 
         //Assert
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest), "Expected status code 400");
@@ -208,6 +208,6 @@ public class Tests
     [OneTimeTearDown]
     public void Teardown()
     {
-        _client?.Dispose();
+        client?.Dispose();
     }
 }
